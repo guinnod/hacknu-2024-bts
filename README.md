@@ -1,42 +1,50 @@
-# Microservices Project Overview
+# Opticash
 
-This project utilizes a microservices architecture to deliver a robust and scalable application, combining various technologies such as Next.js, Django, Express.js, FastAPI, and Flask. Each microservice plays a critical role, from the frontend user interface to backend data handling, web scraping, and scheduled tasks management. The services are containerized using Docker and orchestrated with Docker Compose, all hosted on Google Cloud Platform.
+Подсвечиваем лучшую карту для максимальной экономии в магазинах и ресторанах.
 
-## Table of Contents
+## Архитектура
 
--   [Introduction](#introduction)
--   [Architecture](#architecture)
--   [Installation](#installation)
--   [Usage](#usage)
--   [Features](#features)
--   [Dependencies](#dependencies)
--   [Configuration](#configuration)
--   [Documentation](#documentation)
--   [Examples](#examples)
--   [Troubleshooting](#troubleshooting)
--   [Contributors](#contributors)
--   [License](#license)
+Продукт состоит из 5 сервисов.
 
-## Introduction
+```
+Backend - Django
+Frontend - Next.js
+Веб парсер - Fastapi, selenium, redis
+ИИ обработчик - Express.js
+Планировщик - Flask
+```
 
-This application is designed to leverage the strengths of several frameworks and libraries to manage different facets of a web application. The frontend is built with Next.js, offering server-side rendering for improved performance and SEO. The backend API is managed by Django and Python. The project also features an AI model handler built with Express.js, a web scraper in FastAPI, and a scheduler using Flask.
+## Демонстрация
 
-## Architecture
+Вебсайт доступен по этой [ссылке](https://opticash-front.vercel.app/). Так как мы используем gpt api для обработки, selenium driver for amd64 для парсинга локальный запуск требует апи ключи и определенную архитектуру процессора. Все сервисы работают в google cloud и онлайн доступны.
 
-The system architecture consists of the following components:
+## Установка
 
--   **Frontend Service:** Next.js
--   **Backend API:** Django
--   **GPT Handler:** Express.js
--   **Scraper Service:** FastAPI
--   **Scheduler Service:** Flask
+Для запуска требуется docker, node.js и python
 
-Each service runs in its own Docker container, ensuring isolation, easy scalability, and straightforward deployment. The orchestration of these containers is managed with Docker Compose.
+## Запуск
 
-## Installation
+```bash
+git clone https://github.com/guinnod/hacknu-2024-bts
+cd hacknu-2024-bts
+```
 
-### Prerequisites
+```bash
+cd back
+docker build -t back .
+docker run -d -p 8000:8000 back
+cd ../
+```
 
--   Docker
--   Docker Compose
--   Google Cloud Account
+```bash
+cd front
+npm install
+npm run dev
+cd ../
+```
+
+```bash
+cd scraper
+docker compose up
+cd ../
+```
