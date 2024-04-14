@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  selenium-hub:
+    image: selenium/hub:4.19.1-20240402
+    container_name: selenium-hub
+    ports:
+      - "4442:4442"
+      - "4443:4443"
+      - "4444:4444"
+
+  chrome:
+    image: selenium/node-chrome:4.19.1-20240402
+    shm_size: 2gb
+    depends_on:
+      - selenium-hub
+    environment:
+      - SE_EVENT_BUS_HOST=selenium-hub
+      - SE_EVENT_BUS_PUBLISH_PORT=4442
+      - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+
+  worker:
+    build: .
+    environment:
+      REDIS_HOST: 'redis'
+      SELENIUM_URL: 'http://selenium-hub:4444'
+    command: rq worker
+    depends_on:
+      - redis
+      - chrome
+    volumes:
+      - .:/app
+
+  app:
+    build: .
+    environment:
+      REDIS_HOST: 'redis'
+      SELENIUM_URL: 'http://selenium-hub:4444'
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+      - chrome
+    volumes:
+      - .:/app
+
+volumes:
+  redis_data:
